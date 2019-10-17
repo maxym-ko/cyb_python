@@ -1,6 +1,3 @@
-import math
-
-
 def info_author():
     about_author = f"\
     Виконавець: Коваль\n\
@@ -10,9 +7,14 @@ def info_author():
     print(about_author)
 
 
-print('Ця програма обчиснює суму числа Пі та числа Ейлера')
+print('Ця програма обчиснює суму двох дійсних чисел.')
 info_author()
 
-res = math.pi + math.e
+x = float(input('Введіть перше дійсне число: '))
+y = float(input('Введіть друге дійсне число: '))
 
-print('Результат:', f'{res:.2f}')
+print(f'\nВи ввели наступні значення: x = {x}, y = {y}\n')
+
+res = x + y
+
+print('Результат:', res)
