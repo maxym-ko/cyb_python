@@ -14,8 +14,8 @@ def domain(x: float):
     return (x - 5) and (x + 6) and (x + 12)
 
 
-def f(x: float) -> float:  # Чи треба писати, який вираз вираховується?
-    """Calculate the next expression: cos(29/63) - 22e/(51pi) * 10 / ((x - 5)(x - 6)) + 7sin(x - 8) - 5 / (x + 12)"""
+def f(x: float) -> float:  # Добавити формулу в докуаментацію
+    """Calculate the expression"""
     return math.cos(29 / 63) - 22 * math.e / 51 / math.pi * 10 / (x - 5) / (x + 6) + 7 * math.sin(x - 8) - 5 / (x + 12)
 
 
@@ -24,10 +24,10 @@ def f_total(x: float) -> bool and float:
     Calculate expression if it is possible
     Return True if calculation is successful or False if not and result of calculation
     """
-    if domain(x):
-        return True, f(x)
+    if not domain(x):
+        return False, None
     else:
-        return False, -1
+        return True, f(x)
 
 
 def main():
