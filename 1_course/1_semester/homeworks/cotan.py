@@ -1,7 +1,7 @@
 import math
 
 
-def cotan_compare(x:float, y:float) -> float:
+def cotan_compare(x: float, y: float) -> float:
     """
     Check if one cotanges is bigger/less/equal to the other one
     Return 1 if cotan(x) > cotan(y), 0 if cotan(x) = cotan(y), -1 if cotan(x) < cotan(y)
