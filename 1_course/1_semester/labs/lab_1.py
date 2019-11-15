@@ -34,7 +34,7 @@ def main():
     print("Variant #71 \nThis program calculate an expression using variables, entered by the user")
     info_author()
 
-    x = input('Input the value of x: ')
+    x = input("Input the value of x: ")
 
     try:
         x = float(x)
@@ -51,7 +51,7 @@ def main():
             print(f"result = {result:.6f}")
         else:
             print(
-                f"result = undefined \nThe result can\'t be calculated because x = {x} isn't in the domain of the "
+                f"result = undefined \nThe result can't be calculated because x = {x} isn't in the domain of the "
                 "expression.")
 
 
