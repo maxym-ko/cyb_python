@@ -1,5 +1,3 @@
-# import sys
-# sys.path.append('/home/maxym_ko/cyb/cyb_python/1_course/2_semester/lessons/lesson2')
 from cat import Cat
 
 _menu = {'1': ('run', Cat.run), '2': ('sleep', Cat.sleep), '3': ('eat', Cat.run)}

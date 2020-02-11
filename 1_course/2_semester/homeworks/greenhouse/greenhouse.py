@@ -12,16 +12,18 @@ class Greenhouse:
         self.__fuse = False
         self.__humidity = 36.2
         self.__temperature = 10
-        self.__start_time = 0
-        self.__thread_active = True
         self.__start_time = time.time()
+        # set up and start a thread for "__change()" method
+        self.__interval = 5
+        self.__thread_active = True
         self.__thread = threading.Thread(target=self.__change)
         self.__thread.start()
 
+    # change greenhouse conditions every "__interval" seconds
     def __change(self):
         while True and self.__thread_active:
             current_time = time.time()
-            if current_time - self.__start_time > 5:
+            if current_time - self.__start_time > self.__interval:
                 if self.__humidity > 65:
                     self.__temperature = self.__temperature - 1.4 - self.__opened_windows * 0.9 + self.__working_heaters * 2.3
                 else:
@@ -47,11 +49,11 @@ class Greenhouse:
         for i in range(3):
             self.__heaters[i] = False
 
-    def __check_state(self):
+    def __check_state(self) -> (bool, str):
         if self.__fuse:
             return False, 'You cannot change any conditions, because the greenhouse is working in in emergency mode'
         else:
-            return True, ''
+            return True, 'Greenhouse works properly'
 
     def open_window(self) -> (bool, str):
         success, res = self.__check_state()
@@ -110,7 +112,7 @@ class Greenhouse:
             return success, res
 
         success = False
-        res = 'Failure. All heaters aren\'t working\n'
+        res = 'Failure. All heaters aren\'t working'
         if self.__working_heaters != 0:
             i = 0
             while not self.__heaters[i]:
@@ -124,7 +126,7 @@ class Greenhouse:
     def stop(self):
         self.__thread_active = False
 
-    def passed_time(self):
+    def passed_time(self) -> (bool, str):
         current_time = time.time()
         passed = int(current_time - self.__start_time)
         return True, f'{passed} sec passed'
