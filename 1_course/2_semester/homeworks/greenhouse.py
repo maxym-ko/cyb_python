@@ -1,18 +1,19 @@
-import time, threading
+import threading
+import time
 
 
-class Greenhouse():
-    __windows = [False, False]
-    __opened_windows = 0
-    __heaters = [False, False, False]
-    __working_heaters = 0
-    __fuse = False
-    __humidity = 36.2
-    __temperature = 10
-    __start_time = 0
-    __thread_active = True
+class Greenhouse:
 
     def __init__(self):
+        self.__windows = [False, False]
+        self.__opened_windows = 0
+        self.__heaters = [False, False, False]
+        self.__working_heaters = 0
+        self.__fuse = False
+        self.__humidity = 36.2
+        self.__temperature = 10
+        self.__start_time = 0
+        self.__thread_active = True
         self.__start_time = time.time()
         self.__thread = threading.Thread(target=self.__change)
         self.__thread.start()
