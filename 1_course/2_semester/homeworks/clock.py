@@ -14,7 +14,7 @@ class Clock12:
         By default set time to 00:00.
         """
 
-        Clock12.__check_limit()
+        Clock12._check_limit()
 
         self.__h = 0
         self.__m = 0
@@ -24,19 +24,18 @@ class Clock12:
             raise TypeError('Clock12.__init__ can not take more than 2 positional arguments.')
         elif len(args) == 2:
             self.set_time(args[0], args[1])
-            Clock12.__clock_count += 1
         else:
             if isinstance(args[0], int):
                 self._from_int(args[0])
-                Clock12.__clock_count += 1
             elif isinstance(args[0], Clock12):
                 self._assign(args[0])
-                Clock12.__clock_count += 1
             else:
-                raise TypeError('The single argument of Clock12.__init__ should be int or Clock12')
+                raise ValueError('The single argument of Clock12.__init__ should be int or Clock12')
+
+        Clock12.__clock_count += 1
 
     @staticmethod
-    def __check_limit():
+    def _check_limit():
         if Clock12.__clock_count > Clock12.__limit:
             raise TypeError('You have already created 100 clocks. You cannot create more')
 
