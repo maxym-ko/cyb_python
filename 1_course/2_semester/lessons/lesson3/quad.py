@@ -1,7 +1,25 @@
-from point import Point
+from geo.line import Line
+from geo.point import Point
 
 
 class Quad:
+
+    @property
+    def a(self):
+        return self._a
+
+    @property
+    def b(self):
+        return self._b
+
+    @property
+    def c(self):
+        return self._c
+
+    @property
+    def d(self):
+        return self._d
+
     def __init__(self, a, b, c, d):
         if not (isinstance(a, Point) and isinstance(b, Point) and isinstance(c, Point) and isinstance(d, Point)):
             raise TypeError("a, b, c, d should be Points")
@@ -23,30 +41,17 @@ class Quad:
         self._c = c
         self._d = d
 
-    @property
-    def a(self):
-        return self._a
-
-    @property
-    def b(self):
-        return self._b
-
-    @property
-    def c(self):
-        return self._c
-
-    @property
-    def d(self):
-        return self._d
+    def is_trapezoid(self):
+        if not self:
+            return False
+        ab = Line(self.a, self.b)
+        bc = Line(self.b, self.c)
+        cd = Line(self.c, self.d)
+        da = Line(self.d, self.a)
+        return ab.parallel(cd) and not bc.collinear(da)
 
     def __bool__(self):
         pass
 
     def __repr__(self):
         pass
-
-    def is_trapezoid(self):
-        pass
-
-    def __hash__(self):
-        return hash((self.x, self.y))

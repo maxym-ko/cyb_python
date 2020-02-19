@@ -2,6 +2,15 @@ import math
 
 
 class Point:
+
+    @property
+    def x(self):
+        return self._x
+
+    @property
+    def y(self):
+        return self._y
+
     def __init__(self, *args):
         self._x = 0
         self._y = 0
@@ -44,12 +53,7 @@ class Point:
         return self.x < other.x or (self.x == other.x and self.y < other.y)
 
     def __eq__(self, other):
-        return self.x == other.x and self.y == other.y\
+        return self.x == other.x and self.y == other.y
 
-    @property
-    def x(self):
-        return self._x
-
-    @property
-    def y(self):
-        return self._y
+    def __hash__(self):
+        return hash((self.x, self.y))
