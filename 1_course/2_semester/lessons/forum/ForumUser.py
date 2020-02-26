@@ -32,6 +32,19 @@ class ForumUser:
     def _is_noname(self):
         return self.nick == self._noname_name
 
+    def do_ban(self, other):
+        if self._can_ban() and other._can_be_banned():
+            self._ban(other)
+
+    def _can_ban(self):
+        pass
+
+    def _can_be_banned(self):
+        pass
+
+    def _ban(self, other):
+        pass
+
     @property
     def nick(self):
         return self._nick

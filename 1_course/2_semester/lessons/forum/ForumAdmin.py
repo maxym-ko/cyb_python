@@ -1,5 +1,6 @@
 from ForumUser import ForumUser
 
+
 class Admin(ForumUser):
     def __init__(self, nick=''):
         super().__init__(nick)
@@ -13,3 +14,9 @@ class Admin(ForumUser):
 
     def can_message(self):
         return True
+
+    def _can_ban(self):
+        pass
+
+    def _can_be_banned(self):
+        pass
