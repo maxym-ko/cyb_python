@@ -1,5 +1,5 @@
-# 21_1
-def write_list(filename, lst):
+# 22_1
+def write_lst(filename, lst):
     try:
         with open(filename, 'w') as f:
             for el in lst:
@@ -10,11 +10,11 @@ def write_list(filename, lst):
     return 0
 
 
-write_list('test.txt', [i for i in range(10)])
+write_lst('test.txt', [i for i in range(10)])
 
 
-# 21_2
-def read_to_list(filename):
+# 22_2_a
+def read_to_lst(filename):
     lst = []
     with open(filename) as f:
         for s in f:
@@ -22,4 +22,4 @@ def read_to_list(filename):
     return lst
 
 
-print(read_to_list("test.txt"))
+print(read_to_lst("test.txt"))

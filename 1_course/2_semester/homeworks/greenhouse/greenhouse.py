@@ -1,3 +1,4 @@
+# Переписати, згідно рекомендацій Карнаух
 import threading
 import time
 

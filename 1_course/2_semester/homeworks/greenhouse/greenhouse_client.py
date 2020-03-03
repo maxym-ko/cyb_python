@@ -1,3 +1,4 @@
+# Переписати, згідно рекомендацій Карнаух
 from greenhouse import Greenhouse
 
 _menu = {'1': ('- open window', Greenhouse.open_window),
