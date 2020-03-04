@@ -9,7 +9,7 @@ def read_to_list(filename):
         for s in f:
             try:
                 s = s.strip()  # additional (to complete 22_3)
-                if s != '':    # additional (to complete 22_3)
+                if s != '':  # additional (to complete 22_3)
                     lst.append(int(s))
             except ValueError as e:
                 err_n += 1
@@ -38,22 +38,25 @@ print(write_lst("files/test.txt"))
 
 # 22_7
 def analyze(filename):
-    res = {'int_count': 0, 'float_count': 0, 'blank_count': 0, 'err_count': 0}
+    res = [0, 0, 0, 0]
     with open(filename) as f:
         for s in f:
-            try:
-                int(s)
-                res['int_count'] += 1
-            except ValueError:
-                try:
-                    float(s)
-                    res['float_count'] += 1
-                except ValueError:
-                    if s.strip() != '':
-                        res['err_count'] += 1
-                    else:
-                        res['blank_count'] += 1
-    return res
+            res[get_kind(s)] += 1
+    return {'int_count': res[0], 'float_count': res[1], 'blank_count': res[2], 'err_count': res[3]}
+
+
+def get_kind(s):
+    if s.isspace():
+        return 2
+    try:
+        int(s)
+        return 0
+    except ValueError:
+        try:
+            float(s)
+            return 1
+        except ValueError:
+            return 3
 
 
 print(analyze("files/test.txt"))
@@ -64,15 +67,7 @@ def write_pairs_to_lst(filename):
     lst = []
     with open(filename) as f:
         for s in f:
-            a = ''
-            b = ''
-            for i in range(len(s)):
-                if '0' < s[i] < '9':
-                    a += s[i]
-                else:
-                    b += s[i:].strip()
-                    break
-            lst.append((a, b))
+            lst.append((float(s.split()[0]), float(s.split()[1])))
     return lst
 
 

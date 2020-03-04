@@ -23,3 +23,22 @@ def read_to_lst(filename):
 
 
 print(read_to_lst("test.txt"))
+
+
+# 22_12
+def count_lines(filename):
+    n = 0
+    s = None
+    b = True
+    CRLF = '\n'
+    with open(filename) as f:
+        while s := f.readline(1024):
+            b = (s[-1] == CRLF)
+            if b:
+                n += 1
+    if not b:
+        n += 1
+    return n
+
+
+print(count_lines("test.txt"))
