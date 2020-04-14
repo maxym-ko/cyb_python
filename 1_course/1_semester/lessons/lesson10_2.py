@@ -6,7 +6,7 @@ def f(x):
     return res[0] * x + res[1]
 
 
-data = np.array([(1, 2), (2, 4), (3, 3), (4, 5), (6, 6)])
+data = np.array([(6, 100), (14, 150), (18, 200), (20, 250), (22, 300), (23, 350)])
 
 data_x = []
 data_y = []
@@ -24,7 +24,7 @@ res = b @ np.linalg.inv(a)
 
 print(res)
 
-x = np.linspace(0, 10, 100)
+x = np.linspace(0, 50, 100)
 y = f(x)
 
 plt.plot(x, y)
