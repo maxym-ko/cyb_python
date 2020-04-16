@@ -2,6 +2,7 @@ import sys
 import json
 from builder import Builder
 from student import Student
+from info import Information
 from errors import *
 
 
@@ -40,11 +41,11 @@ def main(init_filename):
         encoding_output = ini_output_dict["encoding"]
         filename_output = ini_output_dict["fname"]
 
-        student = Student()
-        Builder.load(student, filename_csv, filename_json, encoding_input)
+        information = Information()
+        Builder().load(information, filename_csv, filename_json, encoding_input)
         print("OK")
 
-        student.output(filename_output, encoding_output)
+        information.output(filename_output, encoding_output)
         print("OK")
     except InitError:
         pass
@@ -62,14 +63,14 @@ def main(init_filename):
         pass
 
 
-# Todo: handle different errors differently, ask about output in load functions
+# Todo: ask about output in load functions
 def load_ini(filename):
     print("ini " + filename + ": ", end="")
     try:
         with open(filename) as f:
             ini_dict = json.load(f)
     except OSError:
-        raise InitError
+        raise InitError("Cannot read(open) .ini file")
 
     ini_keys = ["input", "output"]
     ini_input_keys = ["encoding", "csv", "json"]
@@ -84,7 +85,7 @@ def load_ini(filename):
     return ini_dict
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     print_author_info()
     print_task()
     print("*****")
@@ -93,6 +94,6 @@ if __name__ == '__main__':
         if len(args) != 2:
             raise CommandLineError("Invalid numbers of arguments")
     except CommandLineError as e:
-        print("***** program aborted *****", repr(e), sep='\n')
+        print("***** program aborted *****", repr(e), sep="\n")
         print_help()
     main(args[1])
