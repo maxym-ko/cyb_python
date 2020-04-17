@@ -42,25 +42,25 @@ def main(init_filename):
         filename_output = ini_output_dict["fname"]
 
         information = Information()
-        Builder().load(information, filename_csv, filename_json, encoding_input)
+        Builder(information, filename_csv, filename_json, encoding_input).load()
         print("OK")
 
         information.output(filename_output, encoding_output)
         print("OK")
     except InitError:
-        pass
+        print("Catch InitError")
     except OpenCsvError:
-        pass
-    except ReadCsvError:
-        pass
+        print("Catch OpenCsvError")
+    except ReadCsvError as e:
+        print("Catch ReadCsvError. " + e._exc)
     except OpenJsonError:
-        pass
+        print("Catch OpenJsonError")
     except ReadJsonError:
-        pass
+        print("Catch ReadJsonError")
     except ConsistentError:
-        pass
+        print("Catch ConsistentError")
     except OutputError:
-        pass
+        print("Catch OutputError")
 
 
 # Todo: ask about output in load functions

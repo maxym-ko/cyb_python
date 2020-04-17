@@ -6,11 +6,11 @@ class Subject:
         self._exam_points = 0
         self._passed = False
 
-    def load(self, total_points, mark, exam_points):
+    def load(self, total_points: int, mark: int, exam_points: int) -> bool:
         self._total_points = total_points
         self._mark = mark
         self._exam_points = exam_points
-        self._passed = (3 <= self.mark <= 5)
+        self._passed = self.mark > 2
         return self.passed
 
     def __eq__(self, other):

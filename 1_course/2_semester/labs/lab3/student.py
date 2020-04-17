@@ -2,39 +2,43 @@ from subject import Subject
 
 
 class Student:
-    def __init__(self, transcript_id, group_id, name, surname, patronymic):
+    # Todo ask about *args (is it ok???)
+    def __init__(self, transcript_id, *args):
         self._transcript_id = transcript_id
-        self._group_id = group_id
-        self._name = name
-        self._surname = surname
-        self._patronymic = patronymic
-        self._rating = 0
-        self._doubts_count = 0
-        self._subjects = []
+        if len(args) == 4:
+            self._group_id = args[0]
+            self._name = args[1]
+            self._surname = args[2]
+            self._patronymic = args[3]
+            self._rating = 0
+            self._doubts_count = 0
+            self._excellent_count = 0
+            self._subjects = []
 
-    # def __init__(self, transcript_id, *args):
-    #     self.transcript_id = transcript_id
-    #     if len(args) == 4:
-    #         self.group_id = args[0]
-    #         self.name = args[1]
-    #         self.surname = args[2]
-    #         self.patronymic = args[3]
-    #         self.rating = 0
-    #         self.doubts_count = 0
-    #         self.subjects = []
-
-    def load(self, subject_name, total_points, mark, exam_points):
-        if (subject := self._find(subject_name)) is None:
-            subject = self._add(subject_name)
+    def load(self, subject_name: str, total_points: int, mark: int, exam_points: int):
+        if (subject := self.find(subject_name)) is None:
+            subject = self.add(subject_name)
+        self._excellent_count += mark == 5
         self._doubts_count += subject.load(total_points, mark, exam_points)
 
-    def _find(self, subject_name):
-        sub_index = self._subjects.index(Subject(subject_name))
-        return None if sub_index == -1 else self._subjects[sub_index]
+    def find(self, subject_name: str) -> Subject:
+        try:
+            sub_index = self._subjects.index(Subject(subject_name))
+            return self._subjects[sub_index]
+        except ValueError:
+            return None
 
-    def _add(self, subject_name):
+    def add(self, subject_name: str) -> Subject:
         self._subjects.append(Subject(subject_name))
         return self._subjects[-1]
+
+    # Todo: is it ok to have this method?
+    def subjects2output(self):
+        self._subjects.sort(key=lambda subject: (subject.subject_name, subject.total_points))
+        res = ""
+        for subject in self._subjects:
+            res += f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
+        return res
 
     def __eq__(self, other):
         return self.transcript_id == other.transcript_id
@@ -66,3 +70,7 @@ class Student:
     @property
     def doubts_count(self):
         return self._doubts_count
+
+    @property
+    def excellent_count(self):
+        return self._excellent_count
