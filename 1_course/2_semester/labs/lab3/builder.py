@@ -44,7 +44,7 @@ class Builder:
                         self._process_current_line()
                         self.information.load(self._transcript_id, self._group_id, self._name, self._surname, self._patronymic, self._subject_name, self._total_points, self._mark, self._exam_points)
         except OSError:
-            raise OpenCsvError("Cannot read(open) .csv file")
+            raise ReadCsvError("Cannot open or read .csv file")
 
     def _process_current_line(self):
         if len(self._line) != 9:
@@ -68,7 +68,7 @@ class Builder:
             self._mark = int(self._mark)
             self._exam_points = int(self._exam_points)
         except ValueError:
-            raise ReadCsvError("Some of the fields can't be converted")
+            raise LoadCsvError("Some of the fields can't be converted")
 
     # Todo: ask if I can output from this method
     def load_stat(self):
@@ -76,21 +76,19 @@ class Builder:
             with open(self.filename_json, encoding=self.encoding) as f:
                 self._stat_dict = json.load(f)
         except OSError:
-            raise OpenJsonError("Cannot read(open) .json file")
+            raise ReadJsonError("Cannot read(open) .json file")
         stat_keys = ["кількість «відмінно»", "сума державних оцінок"]
         if not all(k in self._stat_dict for k in stat_keys):
-            raise ReadJsonError("There are no required keys in the .json file")
-        self._stat_dict["excellent"] = self._stat_dict.pop("кількість «відмінно»")
-        self._stat_dict["mark"] = self._stat_dict.pop("сума державних оцінок")
+            raise LoadJsonError("There are no required keys in the .json file")
+        self._stat_dict["excellent_count"] = self._stat_dict.pop("кількість «відмінно»")
+        self._stat_dict["mark_sum"] = self._stat_dict.pop("сума державних оцінок")
         return self._stat_dict
 
     def fit(self):
         print("json?=csv: ", end="")
-        try:
-            pass
-        except:
-            pass
-        return NotImplemented
+        if self._stat_dict["excellent_count"] != self.information.excellent_count and self._stat_dict["mark_sum"] != self.information.mark_sum:
+            raise IndentationError
+        return True
 
     @property
     def information(self):

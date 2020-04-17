@@ -1,7 +1,6 @@
 import sys
 import json
 from builder import Builder
-from student import Student
 from info import Information
 from errors import *
 
@@ -49,14 +48,14 @@ def main(init_filename):
         print("OK")
     except InitError:
         print("Catch InitError")
-    except OpenCsvError:
+    except ReadCsvError:
         print("Catch OpenCsvError")
-    except ReadCsvError as e:
-        print("Catch ReadCsvError. " + e._exc)
-    except OpenJsonError:
-        print("Catch OpenJsonError")
+    except LoadCsvError:
+        print("Catch LoadCsvError")
     except ReadJsonError:
-        print("Catch ReadJsonError")
+        print("Catch OpenJsonError")
+    except LoadJsonError:
+        print("Catch LoadJsonError")
     except ConsistentError:
         print("Catch ConsistentError")
     except OutputError:
@@ -69,22 +68,23 @@ def load_ini(filename):
     try:
         with open(filename) as f:
             ini_dict = json.load(f)
+
+        ini_keys = ["input", "output"]
+        ini_input_keys = ["encoding", "csv", "json"]
+        ini_output_keys = ["encoding", "fname"]
+        if all(k in ini_dict for k in ini_keys):
+            input_dict = ini_dict[ini_keys[0]]
+            output_dict = ini_dict[ini_keys[1]]
+            if not all(k in input_dict for k in ini_input_keys) or not all(k in output_dict for k in ini_output_keys):
+                raise InitError(f"There are no required keys in the {filename}")
+        else:
+            raise InitError(f"There are no required keys in the {filename}")
+        return ini_dict
     except OSError:
-        raise InitError("Cannot read(open) .ini file")
-
-    ini_keys = ["input", "output"]
-    ini_input_keys = ["encoding", "csv", "json"]
-    ini_output_keys = ["encoding", "fname"]
-    if all(k in ini_dict for k in ini_keys):
-        input_dict = ini_dict[ini_keys[0]]
-        output_dict = ini_dict[ini_keys[1]]
-        if not all(k in input_dict for k in ini_input_keys) or not all(k in output_dict for k in ini_output_keys):
-            raise InitError("There are no required keys in the .ini file")
-    else:
-        raise InitError("There are no required keys in the .ini file")
-    return ini_dict
+        raise InitError(f"Cannot open or read {filename}")
 
 
+# Todo: 1) doc all the function, 2) implement info function, 3) handle all the exceptions
 if __name__ == "__main__":
     print_author_info()
     print_task()
@@ -93,7 +93,7 @@ if __name__ == "__main__":
     try:
         if len(args) != 2:
             raise CommandLineError("Invalid numbers of arguments")
+        main(args[1])
     except CommandLineError as e:
         print("***** program aborted *****", repr(e), sep="\n")
         print_help()
-    main(args[1])

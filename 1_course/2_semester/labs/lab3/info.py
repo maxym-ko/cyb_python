@@ -1,5 +1,5 @@
 from student import Student
-from errors import ReadCsvError, OutputError
+from errors import LoadCsvError, OutputError
 
 
 # Todo ask why I shouldn't add @property for students container
@@ -13,7 +13,9 @@ class Information:
         if (student := self.find(transcript_id)) is None:
             student = self.add(transcript_id, group_id, name, surname, patronymic)
         elif not (student.group_id == group_id and student.name == name and student.surname == surname and student.patronymic == patronymic):
-            raise ReadCsvError("Inconsistent information in .csv file")
+            raise LoadCsvError("Inconsistent information in .csv file")
+        self._excellent_count += mark == 5
+        self._mark_sum += mark
         student.load(subject_name, total_points, mark, exam_points)
 
     # Todo ask about "Student(transcript_id)"

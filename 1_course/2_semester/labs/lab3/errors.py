@@ -16,22 +16,22 @@ class InitError(Error):
         return "***** init file error *****"
 
 
-class OpenCsvError(Error):
+class ReadCsvError(Error):
     def __repr__(self):
         return "***** can not read input csv-file *****"
 
 
-class ReadCsvError(Error):
+class LoadCsvError(Error):
     def __repr__(self):
         return "***** incorrect input csv-file *****"
 
 
-class OpenJsonError(Error):
+class ReadJsonError(Error):
     def __repr__(self):
         return "***** can not read input json-file *****"
 
 
-class ReadJsonError(Error):
+class LoadJsonError(Error):
     def __repr__(self):
         return "***** incorrect input json-file *****"
 

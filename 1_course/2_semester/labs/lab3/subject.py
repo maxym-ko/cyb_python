@@ -4,14 +4,12 @@ class Subject:
         self._total_points = 0
         self._mark = 0
         self._exam_points = 0
-        self._passed = False
 
     def load(self, total_points: int, mark: int, exam_points: int) -> bool:
         self._total_points = total_points
         self._mark = mark
         self._exam_points = exam_points
-        self._passed = self.mark > 2
-        return self.passed
+        return self.mark > 2
 
     def __eq__(self, other):
         return self.subject_name == other.subject_name
@@ -31,7 +29,3 @@ class Subject:
     @property
     def exam_points(self):
         return self._exam_points
-
-    @property
-    def passed(self):
-        return self._passed

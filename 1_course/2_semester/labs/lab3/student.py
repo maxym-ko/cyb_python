@@ -19,6 +19,7 @@ class Student:
         if (subject := self.find(subject_name)) is None:
             subject = self.add(subject_name)
         self._excellent_count += mark == 5
+        self._rating = (self._rating * (len(self._subjects) - 1) + mark) / len(self._subjects)
         self._doubts_count += subject.load(total_points, mark, exam_points)
 
     def find(self, subject_name: str) -> Subject:
