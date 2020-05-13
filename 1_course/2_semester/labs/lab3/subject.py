@@ -1,11 +1,20 @@
+"""
+Author: Maxym Koval (Group K-12)
+"""
+
+
 class Subject:
     def __init__(self, subject_name):
+        # Навіщо тут перевірка коректності значень?
         self._subject_name = subject_name
         self._total_points = 0
         self._mark = 0
         self._exam_points = 0
 
-    def load(self, total_points: int, mark: int, exam_points: int) -> bool:
+    def update(self, total_points: int, mark: int, exam_points: int) -> bool:
+        """Load info about student performance into Subject object
+         Return: True if student's mark is """
+        # Які семе перевірки коректності значень тут потрібні?
         self._total_points = total_points
         self._mark = mark
         self._exam_points = exam_points

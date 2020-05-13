@@ -1,26 +1,32 @@
+"""
+Author: Maxym Koval (Group K-12)
+"""
+
 from subject import Subject
 
 
 class Student:
-    # Todo ask about *args (is it ok???)
-    def __init__(self, transcript_id, *args):
+    def __init__(self, transcript_id, group_id=None, name=None, surname=None, patronymic=None):
+        # Чи потрібно перевіряти обмеження на ім'я і тд
         self._transcript_id = transcript_id
-        if len(args) == 4:
-            self._group_id = args[0]
-            self._name = args[1]
-            self._surname = args[2]
-            self._patronymic = args[3]
-            self._rating = 0
-            self._doubts_count = 0
-            self._excellent_count = 0
-            self._subjects = []
+        self._group_id = group_id
+        self._name = name
+        self._surname = surname
+        self._patronymic = patronymic
+        self._rating = 0
+        self._mark_sum = 0
+        self._doubts_count = 0
+        self._excellent_count = 0
+        self._subjects = []
 
-    def load(self, subject_name: str, total_points: int, mark: int, exam_points: int):
+    def update(self, subject_name: str, total_points: int, mark: int, exam_points: int):
+        # Чи підходить ця назва методу (раніше була така, як і у додатковому фалі до ЛР3 - load)
         if (subject := self.find(subject_name)) is None:
             subject = self.add(subject_name)
-        self._excellent_count += mark == 5
-        self._rating = (self._rating * (len(self._subjects) - 1) + mark) / len(self._subjects)
-        self._doubts_count += subject.load(total_points, mark, exam_points)
+        self._excellent_count += (mark == 5)
+        self._mark_sum += mark if mark > 1 else 2
+        self._rating = self._mark_sum / len(self._subjects)
+        self._doubts_count += subject.update(total_points, mark, exam_points)
 
     def find(self, subject_name: str) -> Subject:
         try:
@@ -33,13 +39,12 @@ class Student:
         self._subjects.append(Subject(subject_name))
         return self._subjects[-1]
 
-    # Todo: is it ok to have this method?
-    def subjects2output(self):
+    def subjects2output(self, stream):
         self._subjects.sort(key=lambda subject: (subject.subject_name, subject.total_points))
         res = ""
         for subject in self._subjects:
             res += f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
-        return res
+        stream.write(res)
 
     def __eq__(self, other):
         return self.transcript_id == other.transcript_id

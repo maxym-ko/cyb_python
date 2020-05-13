@@ -1,6 +1,10 @@
+"""
+Author: Maxym Koval (Group K-12)
+"""
+
 import sys
 import json
-from builder import Builder
+from loader import load
 from info import Information
 from errors import *
 
@@ -28,6 +32,7 @@ def print_help():
 
 def main(init_filename):
     try:
+        print("ini " + init_filename + ": ", end="")
         ini_dict = load_ini(init_filename)
         print("OK")
 
@@ -41,11 +46,16 @@ def main(init_filename):
         filename_output = ini_output_dict["fname"]
 
         information = Information()
-        Builder(information, filename_csv, filename_json, encoding_input).load()
-        print("OK")
 
-        information.output(filename_output, encoding_output)
-        print("OK")
+        load(information, filename_csv, filename_json, encoding_input)
+
+        if not filename_output:
+            print("output stdout:", end="\n")
+            information.output(filename_output, encoding_output)
+        else:
+            print("output " + filename_output + ": ", end="")
+            information.output(filename_output, encoding_output)
+            print("OK")
     except InitError:
         print("Catch InitError")
     except ReadCsvError:
@@ -62,9 +72,7 @@ def main(init_filename):
         print("Catch OutputError")
 
 
-# Todo: ask about output in load functions
 def load_ini(filename):
-    print("ini " + filename + ": ", end="")
     try:
         with open(filename) as f:
             ini_dict = json.load(f)
@@ -84,7 +92,7 @@ def load_ini(filename):
         raise InitError(f"Cannot open or read {filename}")
 
 
-# Todo: 1) doc all the function, 2) implement info function, 3) handle all the exceptions
+# Todo: 1) doc all the function, 2) implement info function, 3) handle all the exceptions, 4) check limits (mark, ...)
 if __name__ == "__main__":
     print_author_info()
     print_task()

@@ -1,17 +1,19 @@
-import json
+"""
+Author: Maxym Koval (Group K-12)
+"""
+
 import csv
-from errors import *
+
+from errors import ReadCsvError, LoadCsvError
 
 
 class Builder:
-    def __init__(self, information, filename_csv, filename_json, encoding):
+    def __init__(self, information, filename, encoding):
         self._information = information
-        self._filename_csv = filename_csv
-        self._filename_json = filename_json
+        self._filename = filename
         self._encoding = encoding
         self._loaded = False
         self._line = ""
-        self._stat_dict = []
         self._transcript_id = ""
         self._group_id = ""
         self._name = ""
@@ -24,43 +26,37 @@ class Builder:
 
     def load(self):
         if self._loaded:
-            return False
-        print("input-csv " + self.filename_csv + ": ", end="")
-        self.load_data()
-        print("OK")
-        print("input-json " + self.filename_json + ": ", end="")
-        self._stat_dict = self.load_stat()
-        print("OK")
-        return self.fit()
-
-    # Todo: what to do with first line
-    def load_data(self):
+            return self.information
         try:
-            with self.information, open(self.filename_csv) as file:
+            with self.information, open(self.filename, encoding=self.encoding) as file:
                 it = csv.reader(file, delimiter=';')
                 next(it)
                 for self._line in it:
                     if self._line:
                         self._process_current_line()
-                        self.information.load(self._transcript_id, self._group_id, self._name, self._surname, self._patronymic, self._subject_name, self._total_points, self._mark, self._exam_points)
+                        self.information.load(self._transcript_id, self._group_id, self._name, self._surname,
+                                              self._patronymic, self._subject_name, self._total_points, self._mark,
+                                              self._exam_points)
+            self._loaded = True
+            return self.information
         except OSError:
             raise ReadCsvError("Cannot open or read .csv file")
 
     def _process_current_line(self):
-        if len(self._line) != 9:
-            # Todo: what to do here?
-            pass
-        else:
-            self._transcript_id = self._line[0]
-            self._mark = self._line[1]
-            self._subject_name = self._line[2]
-            self._patronymic = self._line[3]
-            self._exam_points = self._line[4]
-            self._surname = self._line[5]
-            self._name = self._line[6]
-            self._total_points = self._line[7]
-            self._group_id = self._line[8]
-            self._covert_variables()
+        if len(self._line) != 0:
+            if len(self._line) != 9:
+                raise LoadCsvError("The .csv file contains an invalid number of fields")
+            else:
+                self._transcript_id = self._line[0]
+                self._mark = self._line[1]
+                self._subject_name = self._line[2]
+                self._patronymic = self._line[3]
+                self._exam_points = self._line[4]
+                self._surname = self._line[5]
+                self._name = self._line[6]
+                self._total_points = self._line[7]
+                self._group_id = self._line[8]
+                self._covert_variables()
 
     def _covert_variables(self):
         try:
@@ -68,40 +64,20 @@ class Builder:
             self._mark = int(self._mark)
             self._exam_points = int(self._exam_points)
         except ValueError:
-            raise LoadCsvError("Some of the fields can't be converted")
-
-    # Todo: ask if I can output from this method
-    def load_stat(self):
-        try:
-            with open(self.filename_json, encoding=self.encoding) as f:
-                self._stat_dict = json.load(f)
-        except OSError:
-            raise ReadJsonError("Cannot read(open) .json file")
-        stat_keys = ["кількість «відмінно»", "сума державних оцінок"]
-        if not all(k in self._stat_dict for k in stat_keys):
-            raise LoadJsonError("There are no required keys in the .json file")
-        self._stat_dict["excellent_count"] = self._stat_dict.pop("кількість «відмінно»")
-        self._stat_dict["mark_sum"] = self._stat_dict.pop("сума державних оцінок")
-        return self._stat_dict
-
-    def fit(self):
-        print("json?=csv: ", end="")
-        if self._stat_dict["excellent_count"] != self.information.excellent_count and self._stat_dict["mark_sum"] != self.information.mark_sum:
-            raise IndentationError
-        return True
+            raise LoadCsvError("Some of the fields can't be converted in .csv file")
 
     @property
     def information(self):
         return self._information
 
     @property
-    def filename_csv(self):
-        return self._filename_csv
-
-    @property
-    def filename_json(self):
-        return self._filename_json
+    def filename(self):
+        return self._filename
 
     @property
     def encoding(self):
         return self._encoding
+
+    @property
+    def loaded(self):
+        return self._loaded
