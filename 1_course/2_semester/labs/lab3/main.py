@@ -111,7 +111,7 @@ def load_ini(filename):
 
 
 # Todo: 1) doc all the function
-]
+
 if __name__ == "__main__":
     print_author_info()
     print_task()
