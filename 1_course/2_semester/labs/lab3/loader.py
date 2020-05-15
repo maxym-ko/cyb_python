@@ -30,10 +30,10 @@ def load_stat(filename, encoding):
         with open(filename, encoding=encoding) as f:
             stat_dict = json.load(f)
     except OSError:
-        raise ReadJsonError("Cannot read(open) .json file")
+        raise ReadJsonError(f"Cannot read(open) the {filename}.")
     stat_keys = ["кількість «відмінно»", "сума державних оцінок"]
     if not all(k in stat_dict for k in stat_keys):
-        raise LoadJsonError("There are no required keys in the .json file")
+        raise LoadJsonError(f"There are no required keys in the {filename}.")
     stat_dict["excellent_count"] = stat_dict.pop("кількість «відмінно»")
     stat_dict["mark_sum"] = stat_dict.pop("сума державних оцінок")
     return stat_dict
@@ -41,5 +41,5 @@ def load_stat(filename, encoding):
 
 def fit(information, stat_dict):
     if stat_dict["excellent_count"] != information.excellent_count and stat_dict["mark_sum"] != information.mark_sum:
-        raise IndentationError
+        raise IndentationError("The information in the .csv and .json files doesn't fit.")
     return True

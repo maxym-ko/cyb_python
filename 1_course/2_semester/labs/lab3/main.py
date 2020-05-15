@@ -10,23 +10,40 @@ from errors import *
 
 
 def print_author_info():
-    about_author = f"\
-            Author: Koval\n\
-                    Maxym\n\
-            Group:  K-12\n"
+    about_author = "Author: Koval\n\tMaxym\nGroup:  K-12\n"
     print(about_author)
 
 
 def print_task():
-    task = f"Two files are input (main .csv and additional .json).\n\
-             Files contains information about student performance.\n\
-             The program processes the data and output... and some info about task\n"
+    task = "This is a laboratory work №3, Variant 69. Description of the program:\n\nThe program processes two files " \
+           "- 1) main (.csv) and 2) additional (.json)\n1) The main file contains the following information about " \
+           "the student: \n\t-name, \n\t-group id, \n\t-transcript number, \n\t-subject name, \n\t-points scored " \
+           "during the semester, \n\t-points scored on the exam, \n\t-the total a 100-point system, \n\t-assessment " \
+           "by the state form.\n2) The additional file contains the following information about the student: " \
+           "\n\t-number of grades 'excellent', \n\t-the sum of the assessments of the student.\nAccording to these " \
+           "files, the program finds students who did not pass some subjects but received an 'excellent' grade.\nThe " \
+           "program output to console or in the file (the user chooses) the following information about these " \
+           "students: the number of 'excellent' grades, the number of 'doubts', name, surname, rating, transcript " \
+           "number.\nThe program also output the following information about the subjects that the student passed " \
+           "'excellently': the name of the subject, the total score in points, the assessments.\n"
     print(task)
 
 
-def print_help():
-    help_info = "To run the program you should type the next line: \n\
-           program_name.py init... and some help instructions\n"
+def print_start_program_help():
+    help_info = "\nThe console command must contain only one argument." \
+                "\n\nFollow the instructions below to avoid problem. \n" \
+                "To run the program you should type the next line: \n" \
+                "\t'python3.8 main.py params.json' \nor\n\t'main.py params.json'.\n\n"
+    print(help_info)
+
+
+def print_params_help():
+    help_info = "\nCannot load the settings .json file file." \
+                "\n\nFollow the instructions below to avoid problems. \n" \
+                "The settings .json file must contain dictionary with the keys 'input' and 'output'.\n" \
+                "The value corresponding to\n" \
+                "\t-the 'input' key is a dictionary with keys: 'csv', 'json', 'encoding'\n" \
+                "\t-the 'output' key is a dictionary with keys: 'fname', 'encoding'\n\n"
     print(help_info)
 
 
@@ -51,25 +68,26 @@ def main(init_filename):
 
         if not filename_output:
             print("output stdout:", end="\n")
-            information.output(filename_output, encoding_output)
         else:
             print("output " + filename_output + ": ", end="")
-            information.output(filename_output, encoding_output)
+        information.output(filename_output, encoding_output)
+        if filename_output:
             print("OK")
-    except InitError:
-        print("Catch InitError")
-    except ReadCsvError:
-        print("Catch OpenCsvError")
-    except LoadCsvError:
-        print("Catch LoadCsvError")
-    except ReadJsonError:
-        print("Catch OpenJsonError")
-    except LoadJsonError:
-        print("Catch LoadJsonError")
-    except ConsistentError:
-        print("Catch ConsistentError")
-    except OutputError:
-        print("Catch OutputError")
+    except InitError as e:
+        print("\n", repr(e), sep="")
+        print_params_help()
+    except ReadCsvError as e:
+        print("\n", repr(e), sep="")
+    except LoadCsvError as e:
+        print("\n", repr(e), sep="")
+    except ReadJsonError as e:
+        print("\n", repr(e), sep="")
+    except LoadJsonError as e:
+        print("\n", repr(e), sep="")
+    except ConsistentError as e:
+        print("\n", repr(e), sep="")
+    except OutputError as e:
+        print("\n", repr(e), sep="")
 
 
 def load_ini(filename):
@@ -84,24 +102,22 @@ def load_ini(filename):
             input_dict = ini_dict[ini_keys[0]]
             output_dict = ini_dict[ini_keys[1]]
             if not all(k in input_dict for k in ini_input_keys) or not all(k in output_dict for k in ini_output_keys):
-                raise InitError(f"There are no required keys in the {filename}")
+                raise InitError(f"There are no required keys in the {filename}.")
         else:
-            raise InitError(f"There are no required keys in the {filename}")
+            raise InitError(f"There are no required keys in the {filename}.")
         return ini_dict
     except OSError:
-        raise InitError(f"Cannot open or read {filename}")
+        raise InitError(f"Cannot open or read {filename}.")
 
 
-# Todo: 1) doc all the function, 2) implement info function, 3) handle all the exceptions, 4) check limits (mark, ...)
+# Todo: 1) doc all the function
+]
 if __name__ == "__main__":
     print_author_info()
     print_task()
     print("*****")
-    args = sys.argv
-    try:
-        if len(args) != 2:
-            raise CommandLineError("Invalid numbers of arguments")
-        main(args[1])
-    except CommandLineError as e:
-        print("***** program aborted *****", repr(e), sep="\n")
-        print_help()
+    if len(sys.argv) != 2:
+        print("***** program aborted *****", "***** init file error *****", sep="\n")
+        print_start_program_help()
+    else:
+        main(sys.argv[1])

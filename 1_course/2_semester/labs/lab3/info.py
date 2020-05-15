@@ -1,6 +1,7 @@
 """
 Author: Maxym Koval (Group K-12)
 """
+
 import sys
 
 from student import Student
@@ -19,7 +20,7 @@ class Information:
             student = self.add(transcript_id, group_id, name, surname, patronymic)
         elif not (
                 student.group_id == group_id and student.name == name and student.surname == surname and student.patronymic == patronymic):
-            raise LoadCsvError("Inconsistent information in .csv file")
+            raise LoadCsvError("Inconsistent information in .csv file.")
         self._excellent_count += mark == 5
         self._mark_sum += mark
         student.update(subject_name, total_points, mark, exam_points)
@@ -43,7 +44,7 @@ class Information:
                 with open(filename, "w", encoding=encoding) as stream:
                     self._output(stream)
         except OSError:
-            raise OutputError("Cannot output the result")
+            raise OutputError("Cannot output the result.")
 
     def _output(self, stream):
         self._students.sort(key=lambda student: (

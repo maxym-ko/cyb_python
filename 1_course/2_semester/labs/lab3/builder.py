@@ -40,12 +40,12 @@ class Builder:
             self._loaded = True
             return self.information
         except OSError:
-            raise ReadCsvError("Cannot open or read .csv file")
+            raise ReadCsvError("Cannot open or read .csv file.")
 
     def _process_current_line(self):
         if len(self._line) != 0:
             if len(self._line) != 9:
-                raise LoadCsvError("The .csv file contains an invalid number of fields")
+                raise LoadCsvError("The .csv file contains an invalid number of fields.")
             else:
                 self._transcript_id = self._line[0]
                 self._mark = self._line[1]
@@ -64,7 +64,7 @@ class Builder:
             self._mark = int(self._mark)
             self._exam_points = int(self._exam_points)
         except ValueError:
-            raise LoadCsvError("Some of the fields can't be converted in .csv file")
+            raise LoadCsvError("Some of the fields can't be converted in .csv file.")
 
     @property
     def information(self):

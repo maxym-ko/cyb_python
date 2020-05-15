@@ -1,13 +1,14 @@
 """
 Author: Maxym Koval (Group K-12)
 """
-
+from errors import LoadCsvError
 from subject import Subject
 
 
 class Student:
     def __init__(self, transcript_id, group_id=None, name=None, surname=None, patronymic=None):
-        # Чи потрібно перевіряти обмеження на ім'я і тд
+        Student._check_init_params(transcript_id, group_id, name, surname, patronymic)
+
         self._transcript_id = transcript_id
         self._group_id = group_id
         self._name = name
@@ -19,8 +20,21 @@ class Student:
         self._excellent_count = 0
         self._subjects = []
 
+    @staticmethod
+    def _check_init_params(transcript_id, group_id, name, surname, patronymic):
+        if group_id is not None:
+            if len(transcript_id) != 6:
+                raise LoadCsvError("The transcript number must be equal to 6.")
+            if len(group_id) > 5:
+                raise LoadCsvError("The group id cannot contain more than 5 characters.")
+            if len(name) > 24:
+                raise LoadCsvError("The name cannot contain more than 24 characters.")
+            if len(surname) > 27:
+                raise LoadCsvError("The surname cannot contain more than 27 characters.")
+            if len(patronymic) > 20:
+                raise LoadCsvError("The patronymic cannot contain more than 20 characters.")
+
     def update(self, subject_name: str, total_points: int, mark: int, exam_points: int):
-        # Чи підходить ця назва методу (раніше була така, як і у додатковому фалі до ЛР3 - load)
         if (subject := self.find(subject_name)) is None:
             subject = self.add(subject_name)
         self._excellent_count += (mark == 5)
@@ -41,10 +55,9 @@ class Student:
 
     def subjects2output(self, stream):
         self._subjects.sort(key=lambda subject: (subject.subject_name, subject.total_points))
-        res = ""
         for subject in self._subjects:
-            res += f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
-        stream.write(res)
+            subj_info = f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
+            stream.write(subj_info)
 
     def __eq__(self, other):
         return self.transcript_id == other.transcript_id
