@@ -63,7 +63,7 @@ class Subject:
         self._total_points = total_points
         self._mark = mark
         self._exam_points = exam_points
-        return self.mark > 2
+        return self.mark < 3
 
     def __eq__(self, other):
         return self.subject_name == other.subject_name

@@ -56,8 +56,9 @@ class Student:
     def subjects2output(self, stream):
         self._subjects.sort(key=lambda subject: (subject.subject_name, subject.total_points))
         for subject in self._subjects:
-            subj_info = f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
-            stream.write(subj_info)
+            if subject.mark < 5:
+                subj_info = f"\t{subject.subject_name}\t{subject.total_points}\t{subject.mark}\n"
+                stream.write(subj_info)
 
     def __eq__(self, other):
         return self.transcript_id == other.transcript_id

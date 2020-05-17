@@ -50,9 +50,10 @@ class Information:
         self._students.sort(key=lambda student: (
             student.excellent_count, -student.doubts_count, student.surname, student.transcript_id))
         for student in self._students:
-            stream.write(
-                f"{student.excellent_count}\t{student.doubts_count}\t{student.name}\t{student.surname}\t{student.rating}\t{student.transcript_id}\n")
-            student.subjects2output(stream)
+            if student.doubts_count and student.excellent_count:
+                stream.write(f"{student.excellent_count}\t{student.doubts_count}\t{student.name}\t{student.surname}\t"
+                             f"{student.rating}\t{student.transcript_id}\n")
+                student.subjects2output(stream)
 
     def clear(self):
         self._students.clear()
