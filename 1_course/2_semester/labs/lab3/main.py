@@ -115,14 +115,12 @@ def load_ini(filename):
         raise InitError(f"Cannot open or read {filename}.")
 
 
-# Todo: 1) doc all the function
-
 if __name__ == "__main__":
     print_author_info()
     print_task()
     print("*****")
     if len(sys.argv) != 2:
-        print("***** program aborted *****", "***** init file error *****", sep="\n")
+        print("***** program aborted *****", "***** command line error error *****", sep="\n")
         print_start_program_help()
     else:
         main(sys.argv[1])

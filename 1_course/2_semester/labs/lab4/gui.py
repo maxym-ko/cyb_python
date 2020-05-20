@@ -194,8 +194,12 @@ class GUI(play.Play):
                                                None))
         it = iter(range(9, -1, -1))
         self._reserve_play = play.Row(self.N_RESERVE_PLAY, iter(lambda: _GUIReservePlayColumn(self._playdeck,
-                                                                parent=self._c, left=self._columns[next(it)],
-                                                                bottom=self._y_play, h=self._y_play_height), None))
+                                                                                              parent=self._c,
+                                                                                              left=self._columns[
+                                                                                                  next(it)],
+                                                                                              bottom=self._y_play,
+                                                                                              h=self._y_play_height),
+                                                                None))
         self._in_play = True
         self._blocked = False
 
@@ -276,13 +280,20 @@ class GUI(play.Play):
         if self._dragging:
             x, y = self._posx, self._posy
             self._posx, self._posy = event.x, event.y
-            self._dragging.move(self._posx - x, self._posy - y)
+            dx = self._posx - x
+            dy = self._posy - y
+            self._dragging.move(dx, dy)
+            self._rectangle[0] += dx
+            self._rectangle[1] += dy
+            self._rectangle[2] += dx
+            self._rectangle[3] += dy
 
     def on_release(self, event):
         if self._dragging:
-            to = self._locate(event.x, event.y)
+            to = self._locate_release(event.x, event.y)
             if to is not None:
                 to = to[0]
+                s = GUI.area(*to.rectangle(), *self._rectangle)
                 self._dragging.reset(to)
             if to is None or not self.move(self._drag_from, to):
                 self._rollback()
@@ -319,10 +330,50 @@ class GUI(play.Play):
                     break
         return res
 
+    def _locate_release(self, x, y):
+        area = -1
+        elem = None
+        if y < self._y_base * 2:
+            for el in self._base:
+                tmp = GUI.area(*el.rectangle(), *self._rectangle)
+                if tmp > area:
+                    area = tmp
+                    elem = el
+            if area:
+                return elem, self._DragFrom.BASE
+
+        for el in self._play:
+            tmp = GUI.area(*el.rectangle(), *self._rectangle)
+            if tmp > area:
+                area = tmp
+                elem = el
+        if not area:
+            for el in self._reserve_play:
+                tmp = GUI.area(*el.rectangle(), *self._rectangle)
+                if tmp > area:
+                    area = tmp
+                    elem = el
+            if area == 0:
+                return None
+            return elem, self._DragFrom.PLAY
+        if area == 0:
+            return None
+        return elem, self._DragFrom.RESERVE_PLAY
+
+    @staticmethod
+    def area(xmin, ymax, xmax, ymin, xmin2, ymax2, xmax2, ymin2):
+        dx = min(xmax, xmax2) - max(xmin, xmin2)
+        dy = min(ymax, ymax2) - max(ymin, ymin2)
+        if (dx >= 0) and (dy >= 0):
+            return dx * dy
+        else:
+            return 0
+
     def _which_is_dragged(self, event):
         tmp = self._locate(event.x, event.y)
         if tmp and tmp[1] != self._DragFrom.BASE:
             self._drag_from = tmp[0]
+            self._rectangle = list(tmp[0].rectangle())
         if self._drag_from:
             self._dragging = self._drag_from.top()
             self._dragging.raise_()
@@ -341,12 +392,14 @@ class GUI(play.Play):
         Кількість колод: 1
         Кількість карт у колоді: 52
         Мета пасьянсу: необхідно зібрати всі карти на базових стопках у висхідних послідовностях незалежно від масті.
-    
+
         Правила пасьянсу. 8 тузів вилучаються з колоди й викладаються в базовий ряд. Далі колода ретельно тасується й викладаються 13 карт в одну стопку - це резерв. Верхня карта резерву відкривається. Нижче розташовуються місця для п'яти ігрових стопок. Колода, що залишилась, кладеться поруч. Дозволяється переміщати в базовий ряд верхні карти ігрових стопок, резерву й колоди, що залишилася, у висхідній послідовності незалежно від масті. Карти, які не підходять для переміщення, викладаються в 5 ігрових стопок у довільному порядку. Забороняється переміщати карти з однієї ігрової стопки на іншу, а також забороняється переміщати карти з резерву на ігрові стопки. Колода не перездається.
         Пасьянс зійшовся, якщо всі карти зібрані на базових стопках у висхідних послідовностях незалежно від масті.
 """
-        Message(win, text=text, justify=LEFT, bg='White', foreground='Black', font=('Times', )).pack(padx=5, pady=5, ipadx=5, ipady=5, anchor=CENTER,
-                                                                    expand=YES)
+        Message(win, text=text, justify=LEFT, bg='White', foreground='Black', font=('Times',)).pack(padx=5, pady=5,
+                                                                                                    ipadx=5, ipady=5,
+                                                                                                    anchor=CENTER,
+                                                                                                    expand=YES)
         win.bind('<Escape>', lambda event: win.destroy())
         win.focus_set()
         win.grab_set()

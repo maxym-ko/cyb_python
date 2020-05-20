@@ -184,8 +184,8 @@ class Play:
 
     def deck_play(self, i_to):
         assert (0 <= i_to < len(self._play))
-        return self.move(self._play_deck, self._play[i_to])
+        return self.move(self._playdeck, self._play[i_to])
 
     def deck_base(self, i_to):
         assert (0 <= i_to < len(self._base))
-        return self.move(self._play_deck, self._base[i_to])
+        return self.move(self._playdeck, self._base[i_to])
