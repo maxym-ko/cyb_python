@@ -192,7 +192,6 @@ class GUI(play.Play):
         self._play = play.Row(self.NPLAY, iter(lambda: _GUIPlayColumn(self._playdeck, parent=self._c, left=next(it),
                                                                       bottom=self._y_play, h=self._y_play_height),
                                                None))
-        print()
         it = iter(range(9, -1, -1))
         self._reserve_play = play.Row(self.N_RESERVE_PLAY, iter(lambda: _GUIReservePlayColumn(self._playdeck,
                                                                 parent=self._c, left=self._columns[next(it)],
