@@ -9,13 +9,33 @@ from errors import LoadCsvError, OutputError
 
 
 class Information:
+    """
+    This class contains a list of students and some additional information about them
+
+            Attributes:
+                    mark_sum (int): marks sum
+                    excellent_count (int): number of "excellent" marks
+    """
     def __init__(self):
         self._students = []
         self._mark_sum = 0
         self._excellent_count = 0
 
-    def load(self, transcript_id: str, group_id: str, name: str, surname: str, patronymic: str, subject_name: str,
-             total_points: int, mark: int, exam_points: int):
+    def load(self, transcript_id, group_id, name, surname, patronymic, subject_name, total_points, mark, exam_points):
+        """
+        Load information about the student and subject
+
+                Parameters:
+                        transcript_id (str): transcript number
+                        group_id (str): student group
+                        name (str): student name
+                        surname (str): student surname
+                        patronymic (str): student patronymic
+                        subject_name (str): name of the subject
+                        total_points (int): subject points (max - 100)
+                        mark (int): subject mark (max - 5)
+                        exam_points (int): subject exam points (max - 40)
+        """
         if (student := self.find(transcript_id)) is None:
             student = self.add(transcript_id, group_id, name, surname, patronymic)
         elif not (
@@ -25,14 +45,36 @@ class Information:
         self._mark_sum += mark
         student.update(subject_name, total_points, mark, exam_points)
 
-    def find(self, transcript_id: str) -> Student:
+    def find(self, transcript_id):
+        """
+        Find a subject by subject name
+
+                Parameters:
+                        transcript_id (str): transcript number
+
+                Returns:
+                        students(list): list of students
+        """
         try:
             st_index = self._students.index(Student(transcript_id))
             return self._students[st_index]
         except ValueError:
             return None
 
-    def add(self, transcript_id: str, group_id: str, name: str, surname: str, patronymic: str) -> Student:
+    def add(self, transcript_id, group_id, name, surname, patronymic):
+        """
+        Add a student by transcript number
+
+                Parameters:
+                        transcript_id (str): transcript number
+                        group_id (str): student group
+                        name (str): student name
+                        surname (str): student surname
+                        patronymic (str): student patronymic
+
+                Returns:
+                        student(Student): student that was added
+        """
         self._students.append(Student(transcript_id, group_id, name, surname, patronymic))
         return self._students[-1]
 
@@ -56,6 +98,9 @@ class Information:
                 student.subjects2output(stream)
 
     def clear(self):
+        """
+        Clear all the information in the object
+        """
         self._students.clear()
         self._mark_sum = 0
         self._excellent_count = 0

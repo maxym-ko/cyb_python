@@ -38,7 +38,7 @@ def print_start_program_help():
 
 
 def print_params_help():
-    help_info = "\nCannot load the settings .json file file." \
+    help_info = "\nCannot load the configuration .json file file." \
                 "\n\nFollow the instructions below to avoid problems. \n" \
                 "The settings .json file must contain dictionary with the keys 'input' and 'output'.\n" \
                 "The value corresponding to\n" \
@@ -48,6 +48,12 @@ def print_params_help():
 
 
 def main(init_filename):
+    """
+    Perform all the work
+
+                Parameters:
+                        init_filename (str): configuration file name
+    """
     try:
         print("ini " + init_filename + ": ", end="")
         ini_dict = load_ini(init_filename)
@@ -81,6 +87,15 @@ def main(init_filename):
 
 
 def load_ini(filename):
+    """
+    Check file for required data inside and load it into dictionary
+
+            Parameters:
+                    filename (str): configuration file name
+
+            Returns:
+                    ini_dict (dict): dictionary with loaded information into it
+    """
     try:
         with open(filename) as f:
             ini_dict = json.load(f)

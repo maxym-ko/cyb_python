@@ -8,6 +8,14 @@ from errors import ReadCsvError, LoadCsvError
 
 
 class Builder:
+    """
+    This class can load, process data from the file and load this data into Information object
+
+            Attributes:
+                    information (Information): an Information object to load data to
+                    filename (str): name of file (.csv extension needs) with main information
+                    encoding (str): file encoding
+    """
     def __init__(self, information, filename, encoding):
         self._information = information
         self._filename = filename
@@ -25,6 +33,12 @@ class Builder:
         self._exam_points = 0
 
     def load(self):
+        """
+        Load data from the main file with given encoding to the given Information object
+
+                Returns:
+                        information (information): Information object with loaded data
+        """
         if self._loaded:
             return self.information
         try:

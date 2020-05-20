@@ -165,15 +165,6 @@ class Play:
         return True
 
     @staticmethod
-    def return_move(stack_from, stack_to):
-        card = stack_from.top()
-        if card is None:
-            return False
-        stack_to._put(card)
-        stack_from.away()
-        return True
-
-    @staticmethod
     def can_move(stack_from, stack_to):
         if isinstance(stack_to, _PlayColumn) and not isinstance(stack_from, _PlayDeck):
             return False

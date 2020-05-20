@@ -6,6 +6,19 @@ from subject import Subject
 
 
 class Student:
+    """
+    This class represent a student with a possibility to update information about subjects he passed
+
+            Attributes:
+                    transcript_id (str): transcript number
+                    group_id (str): student group
+                    name (str): student name
+                    surname (str): student surname
+                    patronymic (str): student patronymic
+                    rating (int): student rating (arithmetic mean of student mark)
+                    doubts_count (int): number of subject that student didn't pass
+                    excellent_count (int): number of subject that student passed "excellently"
+    """
     def __init__(self, transcript_id, group_id=None, name=None, surname=None, patronymic=None):
         Student._check_init_params(transcript_id, group_id, name, surname, patronymic)
 
@@ -34,7 +47,16 @@ class Student:
             if len(patronymic) > 20:
                 raise LoadCsvError("The patronymic cannot contain more than 20 characters.")
 
-    def update(self, subject_name: str, total_points: int, mark: int, exam_points: int):
+    def update(self, subject_name, total_points, mark, exam_points):
+        """
+        Update information about the subject student passed
+
+                Parameters:
+                        subject_name (str): name of the subject
+                        total_points (int): subject points (max - 100)
+                        mark (int): subject mark (max - 5)
+                        exam_points (int): subject exam points (max - 40)
+        """
         if (subject := self.find(subject_name)) is None:
             subject = self.add(subject_name)
         self._excellent_count += (mark == 5)
@@ -42,18 +64,42 @@ class Student:
         self._rating = self._mark_sum / len(self._subjects)
         self._doubts_count += subject.update(total_points, mark, exam_points)
 
-    def find(self, subject_name: str) -> Subject:
+    def find(self, subject_name):
+        """
+        Find a subject by subject name
+
+                Parameters:
+                        subject_name (str): name of the subject
+
+                Returns:
+                        subjects(list): list of subjects
+        """
         try:
             sub_index = self._subjects.index(Subject(subject_name))
             return self._subjects[sub_index]
         except ValueError:
             return None
 
-    def add(self, subject_name: str) -> Subject:
+    def add(self, subject_name):
+        """
+        Add a subject by subject name
+
+                Parameters:
+                        subject_name (str): name of the subject
+
+                Returns:
+                        subject(Subject): subject that was added
+        """
         self._subjects.append(Subject(subject_name))
         return self._subjects[-1]
 
     def subjects2output(self, stream):
+        """
+        Write information about subjects with a mark less than 5 into stream
+
+                Parameters:
+                        stream(stream): stream to write information to
+        """
         self._subjects.sort(key=lambda subject: (subject.subject_name, subject.total_points))
         for subject in self._subjects:
             if subject.mark < 5:

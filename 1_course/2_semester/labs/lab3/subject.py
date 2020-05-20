@@ -6,6 +6,15 @@ from errors import LoadCsvError
 
 
 class Subject:
+    """
+    This class represent a subject with a possibility to update information about points and mark
+
+            Attributes:
+                    subject_name (str): name of the subject
+                    total_points (int): subject points (max - 100)
+                    mark (int): subject mark (max - 5)
+                    exam_points (int): subject exam points (max - 40)
+    """
     def __init__(self, subject_name):
         Subject._check_subject_name(subject_name)
 
@@ -57,7 +66,15 @@ class Subject:
         else:
             return 5
 
-    def update(self, total_points: int, mark: int, exam_points: int) -> bool:
+    def update(self, total_points, mark, exam_points):
+        """
+        Update information about the subject points, mark and exam points
+
+                Parameters:
+                        total_points (int): subject points (max - 100)
+                        mark (int): subject mark (max - 5)
+                        exam_points (int): subject exam points (max - 40)
+        """
         Subject._check_points(total_points, mark, exam_points)
 
         self._total_points = total_points
