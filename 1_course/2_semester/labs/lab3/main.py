@@ -120,7 +120,7 @@ if __name__ == "__main__":
     print_task()
     print("*****")
     if len(sys.argv) != 2:
-        print("***** program aborted *****", "***** command line error error *****", sep="\n")
+        print("***** program aborted *****", "***** command line error *****", sep="\n")
         print_start_program_help()
     else:
         main(sys.argv[1])

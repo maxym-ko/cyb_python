@@ -17,7 +17,7 @@ class Error(BaseException):
 
 class CommandLineError(Error):
     def __repr__(self):
-        return "***** command line error error *****"
+        return "***** command line error *****"
 
 
 class InitError(Error):
