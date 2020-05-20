@@ -37,13 +37,13 @@ class Subject:
         if not (0 <= semester_points <= 60):
             raise LoadCsvError("The number of subject semester points cannot be out of range (0, 60).")
         if not (24 <= exam_points <= 40):
-            if exam_points == 0 and mark < 3:
+            if exam_points == 0 and mark > 2:
                 raise LoadCsvError("The subject mark cannot be higher than 2 when the subject exam points equal to 0.")
             else:
                 raise LoadCsvError("The number of subject exam points cannot be out of range (24, 40) "
                                    "or not be equal to 0.")
         mark_correct = Subject._convert_points2mark(total_points)
-        if mark != mark_correct:
+        if mark not in mark_correct:
             raise LoadCsvError("The number of subject points and subject mark match each other.")
 
     @staticmethod
@@ -58,13 +58,13 @@ class Subject:
     @staticmethod
     def _convert_points2mark(total_points):
         if total_points < 60:
-            return 2
+            return -1, 0, 2
         elif total_points < 75:
-            return 3
+            return 3,
         elif total_points < 90:
-            return 4
+            return 4,
         else:
-            return 5
+            return 5,
 
     def update(self, total_points, mark, exam_points):
         """
