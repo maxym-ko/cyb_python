@@ -76,17 +76,7 @@ def main(init_filename):
     except InitError as e:
         print("\n", repr(e), sep="")
         print_params_help()
-    except ReadCsvError as e:
-        print("\n", repr(e), sep="")
-    except LoadCsvError as e:
-        print("\n", repr(e), sep="")
-    except ReadJsonError as e:
-        print("\n", repr(e), sep="")
-    except LoadJsonError as e:
-        print("\n", repr(e), sep="")
-    except ConsistentError as e:
-        print("\n", repr(e), sep="")
-    except OutputError as e:
+    except (ReadCsvError, LoadCsvError, ReadJsonError, LoadJsonError, ConsistentError, OutputError) as e:
         print("\n", repr(e), sep="")
 
 
